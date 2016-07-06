@@ -23,6 +23,7 @@ camPos = true; //if true force camera position according request in dataset
 //dimensions are in mm.
 Delta_name = "Simulator example";
 //-- Frame data ----------------------------------------------
+atom = 0;
 beam_int_radius = 175; // radius inside the rectangular columns - used as reference radius
  // if columns are replaced with rods this is the radius of the rod axis plane. 
 hbase = 60; // height of the base structure
@@ -100,6 +101,7 @@ txtangle= -62;
 // To play with the printers of the datasets, you shall either modify data in the file or 
 // set new values AFTER the include <file>.
 //--------------------------------------------------------------------
+include <data_ATOM.scad> //- Data set for delta 'ATOM3dp' by Layer One
 //include <data_Kossel_mini.scad> //- Data set for delta 'Kossel mini' by J.Rocholl
 //include <data_Rostock_Max.scad> //- Data set for delta 'Rostock Max' by SeemeeCNC
 //include <data_Tiko.scad> //-- Data set for micro delta 'Tiko' by Tiko -slow
@@ -143,7 +145,7 @@ ye=e_radius*sin(e_angle);   //*/
 
 //====================================================================
 view();  //The animation will run around a cylinder based on the maximum reachable radius at the middle of the columns. If arms are sufficiently long, it will bang on columns, belts, etc.
-// view_circle (working_dia,0); // view_circle (dia, height) - if off-limits - display may fail
+//view_circle (working_dia,0); // view_circle (dia, height) - if off-limits - display may fail
 // view_helix (); 
 
 //--- dimensions calculations --------------------------------------------------
@@ -368,8 +370,11 @@ dec_housing = (beam_int_radius+3+extrusion)/2 + max(extrusion, railwidth)/2;
           if (rod_space)  
             dmirrory() 
               cylz (extrusion,htotal, beam_int_radius,rod_space/2);
-          else  
-            cubez(extrusion, extrusion, htotal, beam_int_radius+extrusion/2); 
+          else
+            if(atom)  
+                translate([extrusion/2,0,0])cubez(extrusion*2, extrusion, htotal, beam_int_radius+extrusion/2); 
+            else
+                cubez(extrusion, extrusion, htotal, beam_int_radius+extrusion/2); 
       if (belt_dist||$bdist) {
         bd = $bdist ? $bdist:belt_dist;
         ht = $ht_tens?$ht_tens-25:25; // if tensioner at the bottom
