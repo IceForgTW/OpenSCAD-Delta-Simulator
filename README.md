@@ -9,5 +9,6 @@ predefined dataset for simulation of :
 - Rostock max
 - Fisher
 - Tiko
+- ATOM3dp
 
 and other printers
